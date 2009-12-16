@@ -1,6 +1,6 @@
 ---
 name: POE-Component-Server-Bayeux
-version: 0.03
+version: 0.04
 author:
   - 'Eric Waters <ewaters@uarc.com>'
 abstract: Bayeux/cometd server implementation in POE
@@ -23,7 +23,7 @@ requires:
   Switch: 0
   URI: 0
 configure_requires:
-  Module::Build: 0.340201
+  Module::Build: 0.35
 provides:
   POE::Component::Client::Bayeux:
     file: lib/POE/Component/Client/Bayeux.pm
@@ -36,7 +36,7 @@ provides:
     file: lib/POE/Component/Client/Bayeux/Utilities.pm
   POE::Component::Server::Bayeux:
     file: lib/POE/Component/Server/Bayeux.pm
-    version: 0.03
+    version: 0.04
   POE::Component::Server::Bayeux::Client:
     file: lib/POE/Component/Server/Bayeux/Client.pm
   POE::Component::Server::Bayeux::Logger:
@@ -57,7 +57,7 @@ provides:
     file: lib/POE/Component/Server/Bayeux/Request.pm
   POE::Component::Server::Bayeux::Utilities:
     file: lib/POE/Component/Server/Bayeux/Utilities.pm
-generated_by: Module::Build version 0.340201
+generated_by: Module::Build version 0.35
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4

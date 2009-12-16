@@ -1,5 +1,10 @@
 Revision history for Perl extension POE::Component::Server::Bayeux
 
+0.04 - Wed, 16 Dec 2009 08:10:52 -0700
+
+ - Added 'Connection: close' to all request headers
+   Fixes "Too many files open" error which may occur after a while
+
 0.03 - Tue, 06 Oct 2009 09:48:15 -0600
 
  - If $ENV{POE_DEBUG}, will turn on POE debug and trace options for all POE::Sessions

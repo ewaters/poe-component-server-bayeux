@@ -147,8 +147,10 @@ sub complete {
     if ($self->http_response->streaming) {
         $self->http_response->send( $self->http_response );
         $self->http_response->close();
-        $self->http_request->header(Connection => 'close');
     }
+
+    # Ensure no KeepAlive
+    $self->http_request->header(Connection => 'close');
 
     if ($self->post_handle) {
         while (my $message = shift @{ $self->post_handle }) {

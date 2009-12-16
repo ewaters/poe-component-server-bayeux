@@ -98,7 +98,7 @@ use URI;
 
 ## Class globals ###
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 our $protocol_version = '1.0';
 our $supported_connection_types = [ 'long-polling' ];
 
@@ -550,6 +550,9 @@ sub http_server_generic {
     if ($heap->{args}{PostHandle}) {
         $heap->{args}{PostHandle}($request, $response);
     }
+
+    # Ensure no KeepAlive
+    $request->header(Connection => 'close');
 
     return RC_OK;
 }
