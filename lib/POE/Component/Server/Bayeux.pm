@@ -539,7 +539,7 @@ sub http_server_generic {
         close $in;
         $response->content($content);
 
-        my $ip = $request->header('X-Forwarded-For') || $request->{connection}{remote_ip};
+        my $ip = fetch_ip_from_request($request);
         $heap->{logger}->info(sprintf 'Serving %s %s %s', $ip, $uri->path, $response->content_type);
     }
     else {
@@ -564,7 +564,7 @@ sub handle_cometd {
 
     # Deny based upon ClientMaxConnections restrictions
 
-    my $ip = $request->header('X-Forwarded-For') || $request->{connection}{remote_ip};
+    my $ip = fetch_ip_from_request($request);
     if (! $ip) {
         $ip = '0.0.0.0';
         $heap->{logger}->error("No IP found for cometd request");
@@ -671,11 +671,25 @@ sub delay_sub {
     $kernel->delay_add('delay_sub_cb', $delay_sec, $delay_name);
     $heap->{delay_sub}{$delay_name} = $sub;
 }
+
 sub delay_sub_cb {
     my ($kernel, $heap, $delay_name) = @_[KERNEL, HEAP, ARG0];
 
     my $sub = delete $heap->{delay_sub}{$delay_name};
     &$sub();
+}
+
+sub fetch_ip_from_request {
+    my $request = shift;
+
+    if (my $forwarded_for = $request->header('X-Forwarded-For')) {
+        # X-Forwarded-For may contain a comma separated list of IPs if it was proxied
+        my @ips = split /, /, $forwarded_for;
+        return $ips[0];
+    }
+    else {
+        return $request->{connection}{remote_ip};
+    }
 }
 
 ## Client agnostic, no auth performed ###
