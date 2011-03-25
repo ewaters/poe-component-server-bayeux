@@ -187,6 +187,25 @@ sub message_acl {
     return if $message->is_error;
 }
 
+=head2 check_message_delivery_acl ($message_data)
+
+=over 4
+
+Wrapper around the server's optional method MessageDeliveryACL.
+
+=back 
+
+=cut
+
+sub check_message_delivery_acl {
+    my ($self, $message) = @_;
+
+    my $subref = $self->server_config->{MessageDeliveryACL};
+    return 1 if ! $subref;
+    return $subref->($self, $message);
+}
+
+
 =head2 is_subscribed ($channel)
 
 =over 4
@@ -219,6 +238,10 @@ sub send_message {
     my ($self, $message, $subscription_args) = @_;
 
     if ($subscription_args->{no_callback}) {
+        return;
+    }
+
+    if (! $self->check_message_delivery_acl($message)) {
         return;
     }
 
